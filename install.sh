@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 # SBA dotfiles installation script
-# installs starship
-# creates symlinks from ~ to dotfiles in this repository
+# installs packages and creates symlinks from ~ to dotfiles in this repository
 
 set -e  # exit on error
 
@@ -17,13 +16,42 @@ echo "SBA dotfiles install script"
 echo "====================================="
 echo ""
 
-# install starship
-echo "Installing Starship prompt..."
-if command -v starship &> /dev/null; then
-    echo "Starship is already installed, skipping..."
+# packages to install
+PACKAGES=(
+        "vim"
+        "ufw"
+        "alacritty"
+        "tree"
+        "unzip"
+        "obsidian"
+        "waybar"
+        "starship"
+        "docker"
+        "lazydocker"
+        "lazygit"
+)
+
+# install packages
+echo "Installing packages..."
+echo ""
+
+PACKAGES_TO_INSTALL=()
+for pkg in "${PACKAGES[@]}"; do
+    if pacman -Qi "$pkg" &> /dev/null; then
+        echo "✓ $pkg is already installed"
+    else
+        echo "→ $pkg will be installed"
+        PACKAGES_TO_INSTALL+=("$pkg")
+    fi
+done
+
+if [ ${#PACKAGES_TO_INSTALL[@]} -gt 0 ]; then
+    echo ""
+    echo "Installing ${#PACKAGES_TO_INSTALL[@]} package(s)..."
+    sudo pacman -S --needed "${PACKAGES_TO_INSTALL[@]}"
+    echo "Package installation complete!"
 else
-    sudo pacman -S --needed starship
-    echo "Starship installed successfully!"
+    echo "All packages are already installed!"
 fi
 echo ""
 

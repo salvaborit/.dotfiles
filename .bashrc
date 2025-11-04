@@ -13,12 +13,15 @@ source ~/.local/share/omarchy/default/bash/rc
 alias l='ls -lh'
 alias ll='ls -lah'
 
+alias gg='lazygit'
 alias gita='git add'
 alias gitc='git commit -m'
 alias gitac='git add . && git commit -m'
 alias gitl='git log'
 alias gitd='git diff'
 alias gits='git status'
+alias d='docker'
+alias g='git'
 
 alias pingpi='ping 192.168.1.12'
 
@@ -48,3 +51,4 @@ eval "$(starship init bash)"
 export STARSHIP_CONFIG=~/.config/starship.toml
 
 export PATH="$HOME/.local/bin:$PATH"
+
