@@ -95,8 +95,25 @@ tooltip {
   margin-left: 4px;
 }
 
+#mpris {
+  margin-left: 30px;
+  margin-right: 4px;
+}
+
+#cpu-box {
+  margin-left: -5px;
+}
+
 #custom-cpuusage {
-  margin-right: 8px;
+  margin-right: 0px;
+}
+
+#memory {
+  margin-right: 0px;
+}
+
+#custom-diskfree {
+  margin-left: -5px;
 }
 
 .hidden {

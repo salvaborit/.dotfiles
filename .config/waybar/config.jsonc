@@ -159,9 +159,9 @@
   },
   "mpris": {
     "player": "spotify",
-    "format": "\t{player_icon} {title} — {artist}",
-    "format-paused": "\t  {title} — {artist}",
-    "format-playing": "\t  {title} — {artist}",
+    "format": "{player_icon} {title} — {artist}",
+    "format-paused": "  {title} — {artist}",
+    "format-playing": "  {title} — {artist}",
     "max-length": 40,
     "truncate": "end",
   },
@@ -210,8 +210,7 @@
 
   "memory": {
     "interval": 5,
-    "format": "{used:0.1f}G",
-    "min-length": 6
+    "format": "{used:0.1f}G"
   },
 
   "custom/cpuusage": {
@@ -231,8 +230,7 @@
   "custom/diskfree": {
     "exec": "df -h --output=avail / | tail -n1",
     "interval": 30,
-    "return-type": "text",
-    "min-length": 6
+    "return-type": "text"
   },
 
   "custom/ipaddr": {
