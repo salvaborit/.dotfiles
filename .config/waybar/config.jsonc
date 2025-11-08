@@ -25,10 +25,16 @@
     "battery",
     "idle_inhibitor",
 
+    "custom/separator",
+
     "group/load-box",
+    "custom/separator",
     "group/cpu-box",
 
+    "custom/separator",
+
     "group/disk-box",
+    "custom/separator",
     "group/uptime-box"
   ],
   "hyprland/workspaces": {
@@ -260,6 +266,12 @@
     "exec": "awk '{print int($1/3600) \"h\"}' /proc/uptime",
     "interval": 60,
     "format": "{}",
+    "tooltip": false
+  },
+
+  "custom/separator": {
+    "format": "│",
+    "interval": "once",
     "tooltip": false
   },
 }
