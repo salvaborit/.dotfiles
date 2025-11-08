@@ -5,10 +5,7 @@
 
 set -e  # exit on error
 
-# get pwd
 DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-# backup dir
 BACKUP_DIR="$HOME/.dotfiles_backup"
 
 echo "====================================="
@@ -35,7 +32,6 @@ PACKAGES=(
         "sc3-plugins"
 )
 
-# install packages
 echo "Installing packages..."
 echo ""
 
@@ -59,12 +55,10 @@ else
 fi
 echo ""
 
-# create backup dir if not exists
 mkdir -p "$BACKUP_DIR"
 echo "Backup directory: $BACKUP_DIR"
 echo ""
 
-# create .config dir if not exists
 mkdir -p "$HOME/.config"
 
 create_symlink_with_backup() {
@@ -72,7 +66,6 @@ create_symlink_with_backup() {
     local target="$2"
     local filename="$3"
 
-    # check file exists in repo
     if [ ! -e "$source" ]; then
         echo "Warning: $filename not found in $DOTFILES_DIR, skipping..."
         return
@@ -86,14 +79,11 @@ create_symlink_with_backup() {
             return
         fi
 
-        # backup existing
         echo "→ Backing up existing $filename"
-        # create parent dir in backup if needed
         mkdir -p "$(dirname "$BACKUP_DIR/$filename")"
         mv "$target" "$BACKUP_DIR/$filename"
     fi
 
-    # create symlink
     echo "→ Creating symlink: $filename"
     ln -s "$source" "$target"
 }
@@ -116,13 +106,13 @@ create_symlink_with_backup "$DOTFILES_DIR/.config/omarchy/themes/omarchy-sba-00-
 
 echo ""
 
-# Run optional Omarchy-specific setups
+# optional Omarchy-specific setups
 echo "====================================="
 echo "Optional Configurations"
 echo "====================================="
 echo ""
 
-# Sonic Pi audio fix for Omarchy
+# sonic-pi audio fix for omarchy
 if [ -f "$DOTFILES_DIR/optional/omarchy-sonic-pi-fix.sh" ]; then
     bash "$DOTFILES_DIR/optional/omarchy-sonic-pi-fix.sh"
 fi
@@ -131,6 +121,6 @@ echo ""
 echo "====================================="
 echo "Installation complete!"
 echo "====================================="
-echo "Backups of your original files are in: $BACKUP_DIR"
+echo "Backups of original files are in: $BACKUP_DIR"
 echo ""
 echo "To apply changes, run: source ~/.bashrc"
