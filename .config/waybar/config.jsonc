@@ -6,6 +6,7 @@
   "height": 26,
   "modules-left": [
     "custom/omarchy",
+    "custom/separator",
     "group/ipaddr-box",
     "custom/separator",
     "hyprland/workspaces",
@@ -156,8 +157,6 @@
     "icon-size": 12,
     "spacing": 12
   },
-
-
   "mpris": {
     "player": "spotify",
     "format": "\t{player_icon} {title} — {artist}",
@@ -166,7 +165,6 @@
     "max-length": 40,
     "truncate": "end",
   },
-
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
@@ -174,14 +172,11 @@
       "deactivated": "   "
     }
   },
-
   "custom/cava": {
     "exec": "~/.config/waybar/scripts/cava.sh",
     "return-type": "json",
     "interval": 0
   },
-
-
 
   "group/ipaddr-box": {
     "orientation": "horizontal",
