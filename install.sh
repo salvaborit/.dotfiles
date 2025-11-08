@@ -106,6 +106,11 @@ create_symlink_with_backup "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc" ".vimrc"
 create_symlink_with_backup "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml" ".config/starship.toml"
 create_symlink_with_backup "$DOTFILES_DIR/.config/waybar" "$HOME/.config/waybar" ".config/waybar"
 create_symlink_with_backup "$DOTFILES_DIR/.config/hypr/looknfeel.conf" "$HOME/.config/hypr/looknfeel.conf" ".config/hypr/looknfeel.conf"
+create_symlink_with_backup "$DOTFILES_DIR/.config/hypr/monitors.conf" "$HOME/.config/hypr/monitors.conf" ".config/hypr/monitors.conf"
+create_symlink_with_backup "$DOTFILES_DIR/.config/hypr/hyprland.conf" "$HOME/.config/hypr/hyprland.conf" ".config/hypr/hyprland.conf"
+create_symlink_with_backup "$DOTFILES_DIR/.config/walker/config.toml" "$HOME/.config/walker/config.toml" ".config/walker/config.toml"
+create_symlink_with_backup "$DOTFILES_DIR/.config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml" ".config/alacritty/alacritty.toml"
+create_symlink_with_backup "$DOTFILES_DIR/.config/uwsm/default" "$HOME/.config/uwsm/default" ".config/uwsm/default"
 
 echo ""
 
