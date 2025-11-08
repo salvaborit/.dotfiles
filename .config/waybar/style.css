@@ -95,6 +95,10 @@ tooltip {
   margin-left: 4px;
 }
 
+#custom-cpuusage {
+  margin-right: 8px;
+}
+
 .hidden {
     opacity: 0;
 }
