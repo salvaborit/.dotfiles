@@ -108,9 +108,11 @@ create_symlink_with_backup "$DOTFILES_DIR/.config/waybar" "$HOME/.config/waybar"
 create_symlink_with_backup "$DOTFILES_DIR/.config/hypr/looknfeel.conf" "$HOME/.config/hypr/looknfeel.conf" ".config/hypr/looknfeel.conf"
 create_symlink_with_backup "$DOTFILES_DIR/.config/hypr/monitors.conf" "$HOME/.config/hypr/monitors.conf" ".config/hypr/monitors.conf"
 create_symlink_with_backup "$DOTFILES_DIR/.config/hypr/hyprland.conf" "$HOME/.config/hypr/hyprland.conf" ".config/hypr/hyprland.conf"
+create_symlink_with_backup "$DOTFILES_DIR/.config/hypr/bindings.conf" "$HOME/.config/hypr/bindings.conf" ".config/hypr/bindings.conf"
 create_symlink_with_backup "$DOTFILES_DIR/.config/walker/config.toml" "$HOME/.config/walker/config.toml" ".config/walker/config.toml"
 create_symlink_with_backup "$DOTFILES_DIR/.config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml" ".config/alacritty/alacritty.toml"
 create_symlink_with_backup "$DOTFILES_DIR/.config/uwsm/default" "$HOME/.config/uwsm/default" ".config/uwsm/default"
+create_symlink_with_backup "$DOTFILES_DIR/.config/omarchy/themes/omarchy-sba-00-theme" "$HOME/.config/omarchy/themes/omarchy-sba-00-theme" ".config/omarchy/themes/omarchy-sba-00-theme"
 
 echo ""
 

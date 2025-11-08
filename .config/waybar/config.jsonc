@@ -23,10 +23,11 @@
     "pulseaudio",
     "cpu",
     "battery",
-
     "idle_inhibitor",
+
     "group/load-box",
     "group/cpu-box",
+
     "group/disk-box",
     "group/uptime-box"
   ],
