@@ -7,6 +7,7 @@
   "modules-left": [
     "custom/omarchy",
     "group/ipaddr-box",
+    "custom/separator",
     "hyprland/workspaces",
   ],
   "modules-center": [
@@ -24,15 +25,11 @@
     "cpu",
     "battery",
     "idle_inhibitor",
-
     "custom/separator",
-
     "group/load-box",
     "custom/separator",
     "group/cpu-box",
-
     "custom/separator",
-
     "group/disk-box",
     "custom/separator",
     "group/uptime-box"
