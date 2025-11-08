@@ -104,6 +104,8 @@ echo "Creating symlinks..."
 create_symlink_with_backup "$DOTFILES_DIR/.bashrc" "$HOME/.bashrc" ".bashrc"
 create_symlink_with_backup "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc" ".vimrc"
 create_symlink_with_backup "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml" ".config/starship.toml"
+create_symlink_with_backup "$DOTFILES_DIR/.config/waybar" "$HOME/.config/waybar" ".config/waybar"
+create_symlink_with_backup "$DOTFILES_DIR/.config/hypr/looknfeel.conf" "$HOME/.config/hypr/looknfeel.conf" ".config/hypr/looknfeel.conf"
 
 echo ""
 

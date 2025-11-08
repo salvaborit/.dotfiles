@@ -12,7 +12,8 @@
 }
 
 .modules-left, .modules-right, .modules-center {
-    background-color: alpha(@background, 0.94);
+    background-color: alpha(@background, 0.05);
+    border: 1px solid alpha(@foreground, 0.15);
     min-height: 24px;
     border-radius: 8px;
     margin: 4px 4px 2px 4px;
@@ -70,7 +71,9 @@
 }
 
 tooltip {
-    background-color: alpha(@background, 0.9);
+    background-color: alpha(@background, 0.3);
+    border: 1px solid alpha(@foreground, 0.15);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 2px;
 }
 
