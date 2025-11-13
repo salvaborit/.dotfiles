@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Sonic Pi
+Comment=The Live Coding Music Synth for Everyone (with audio fix)
+Exec=/home/sba/.local/bin/sonic-pi-with-audio
+Icon=sonic-pi
+Terminal=false
+StartupNotify=false
+Categories=AudioVideo;Audio;

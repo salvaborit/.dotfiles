@@ -1,0 +1,23 @@
+#!/bin/bash
+# Launch application or focus if already running
+# Usage: launch-or-focus [window-pattern] [launch-command]
+
+if (($# == 0)); then
+  echo "Usage: launch-or-focus [window-pattern] [launch-command]"
+  exit 1
+fi
+
+WINDOW_PATTERN="$1"
+LAUNCH_COMMAND="${2:-$WINDOW_PATTERN}"
+
+# Find window matching the pattern (case insensitive)
+WINDOW_ADDRESS=$(hyprctl clients -j | jq -r --arg p "$WINDOW_PATTERN" \
+  '.[]|select((.class|test("\\b" + $p + "\\b";"i")) or (.title|test("\\b" + $p + "\\b";"i")))|.address' | head -n1)
+
+if [[ -n $WINDOW_ADDRESS ]]; then
+  # Window exists, focus it
+  hyprctl dispatch focuswindow "address:$WINDOW_ADDRESS"
+else
+  # Window doesn't exist, launch it
+  eval exec $LAUNCH_COMMAND &
+fi

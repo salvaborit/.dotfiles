@@ -1,0 +1,236 @@
+{
+  "reload_style_on_change": true,
+  "layer": "top",
+  "position": "top",
+  "spacing": 0,
+  "height": 26,
+  "modules-left": [
+    "group/ipaddr-box",
+    "custom/separator",
+    "hyprland/workspaces",
+  ],
+  "modules-center": [
+    "clock",
+    "mpris",
+    "custom/cava"
+  ],
+  "modules-right": [
+    "group/tray-expander",
+    "bluetooth",
+    "network",
+    "pulseaudio",
+    "cpu",
+    "battery",
+    "idle_inhibitor",
+    "custom/separator",
+    "group/load-box",
+    "custom/separator",
+    "group/cpu-box",
+    "custom/separator",
+    "group/disk-box",
+    "custom/separator",
+    "group/uptime-box"
+  ],
+  "hyprland/workspaces": {
+    "on-click": "activate",
+    "format": "{icon}",
+    "format-icons": {
+      "default": "",
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "active": "󱓻"
+    },
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
+  },
+
+  "cpu": {
+    "interval": 5,
+    "format": "󰍛",
+    "on-click": "alacritty -e btop"
+  },
+  "clock": {
+    "format": "{:%d W%V %H:%M}",
+    "format-alt": "{:L%d %B W%V %Y}",
+    "tooltip": false,
+    "on-click-right": "alacritty -e timedatectl"
+  },
+  "network": {
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "format": "{icon}",
+    "format-wifi": "{icon}",
+    "format-ethernet": "󰀂",
+    "format-disconnected": "󰤮",
+    "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-disconnected": "Disconnected",
+    "interval": 3,
+    "spacing": 1,
+    "on-click": "nmtui"
+  },
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-discharging": "{icon}",
+    "format-charging": "{icon}",
+    "format-plugged": "",
+    "format-icons": {
+      "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+      "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+    "format-full": "󰂅",
+    "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
+    "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
+    "interval": 5,
+    "on-click": "systemctl poweroff",
+    "states": {
+      "warning": 20,
+      "critical": 10
+    }
+  },
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "󰂲",
+    "format-connected": "",
+    "tooltip-format": "Devices connected: {num_connections}",
+    "on-click": "blueberry"
+  },
+  "pulseaudio": {
+    "format": "{icon}",
+    "on-click": "alacritty --class=Wiremix -e wiremix",
+    "on-click-right": "pamixer -t",
+    "tooltip-format": "Playing at {volume}%",
+    "scroll-step": 5,
+    "format-muted": "",
+    "format-icons": {
+      "default": ["", "", ""]
+    }
+  },
+  "group/tray-expander": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 600,
+      "children-class": "tray-group-item"
+    },
+    "modules": ["custom/expand-icon", "tray"]
+  },
+  "custom/expand-icon": {
+    "format": " ",
+    "tooltip": false
+  },
+  "tray": {
+    "icon-size": 12,
+    "spacing": 12
+  },
+  "mpris": {
+    "player": "spotify",
+    "format": "{player_icon} {title} — {artist}",
+    "format-paused": "  {title} — {artist}",
+    "format-playing": "  {title} — {artist}",
+    "max-length": 40,
+    "truncate": "end",
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "   ",
+      "deactivated": "   "
+    }
+  },
+  "custom/cava": {
+    "exec": "~/.config/waybar/scripts/cava.sh",
+    "return-type": "json",
+    "interval": 0
+  },
+
+  "group/ipaddr-box": {
+    "orientation": "horizontal",
+    "modules": ["custom/ipaddr"],
+  },
+
+  "group/network-box": {
+    "orientation": "horizontal",
+    "modules": ["network#throughput"],
+  },
+
+  "group/load-box": {
+    "orientation": "horizontal",
+    "modules": ["load"],
+  },
+
+  "group/cpu-box": {
+    "orientation": "horizontal",
+    "modules": ["custom/cpuusage", "custom/cputemp"],
+  },
+
+  "group/disk-box": {
+    "orientation": "horizontal",
+    "modules": ["memory", "custom/diskfree"],
+  },
+
+  "group/uptime-box": {
+    "orientation": "horizontal",
+    "modules": ["custom/uptime"],
+  },
+
+  "memory": {
+    "interval": 5,
+    "format": "{used:0.1f}G"
+  },
+
+  "custom/cpuusage": {
+    "exec": "awk -v FS=' ' '/^cpu /{u=$2+$4; t=$2+$4+$5} END {printf(\"%.1f%%\", u*100/t)}' /proc/stat",
+    "interval": 5,
+    "return-type": "text",
+    "min-length": 6
+  },
+
+  "custom/cputemp": {
+    "exec": "sensors | awk '/^Package id 0:/ {print $4}' | tr -d '+'",
+    "interval": 5,
+    "return-type": "text",
+    "min-length": 6
+  },
+
+  "custom/diskfree": {
+    "exec": "df -h --output=avail / | tail -n1",
+    "interval": 30,
+    "return-type": "text"
+  },
+
+  "custom/ipaddr": {
+    "exec": "~/.config/waybar/scripts/ipaddr.sh",
+    "interval": 5,
+    "return-type": "text"
+  },
+
+  "load": {
+    "interval": 5,
+    "format": "{load1:.2f} {load5:.2f} {load15:.2f}",
+    "min-length": 14
+  },
+
+  "custom/uptime": {
+    "exec": "awk '{print int($1/3600) \"h\"}' /proc/uptime",
+    "interval": 60,
+    "format": "{}",
+    "tooltip": false
+  },
+
+  "custom/separator": {
+    "format": "│",
+    "interval": "once",
+    "tooltip": false
+  },
+}

@@ -20,6 +20,7 @@ PACKAGES=(
         "alacritty"
         "tree"
         "unzip"
+        "less"
         "obsidian"
         "waybar"
         "starship"
@@ -52,6 +53,19 @@ if [ ${#PACKAGES_TO_INSTALL[@]} -gt 0 ]; then
     echo "Package installation complete!"
 else
     echo "All packages are already installed!"
+fi
+echo ""
+
+# Install Claude Code
+if ! command -v claude &> /dev/null; then
+    echo "→ Installing Claude Code..."
+    if curl -fsSL https://claude.ai/install.sh | bash; then
+        echo "✓ Claude Code installed"
+    else
+        echo "✗ Claude Code installation failed"
+    fi
+else
+    echo "✓ Claude Code is already installed"
 fi
 echo ""
 

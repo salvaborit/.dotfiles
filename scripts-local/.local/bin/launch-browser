@@ -1,0 +1,27 @@
+#!/bin/bash
+# Launch default web browser with optional URL
+# Handles --private flag for incognito/private mode
+
+# Get default browser
+default_browser=$(xdg-settings get default-web-browser 2>/dev/null)
+
+if [[ -z $default_browser ]]; then
+  # Fallback to chromium if no default set
+  browser_exec="chromium"
+else
+  # Extract executable from .desktop file
+  browser_exec=$(sed -n 's/^Exec=\([^ ]*\).*/\1/p' \
+    {~/.local,/usr}/share/applications/$default_browser 2>/dev/null | head -1)
+fi
+
+# Determine private flag based on browser
+if [[ $browser_exec =~ (firefox|zen|librewolf) ]]; then
+  private_flag="--private-window"
+else
+  private_flag="--incognito"
+fi
+
+# Replace --private with browser-specific flag
+args="${@/--private/$private_flag}"
+
+exec $browser_exec $args &

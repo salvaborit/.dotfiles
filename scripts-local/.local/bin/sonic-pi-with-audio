@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Sonic Pi wrapper that auto-connects JACK ports for audio output
+
+# Launch Sonic Pi in the background
+/usr/bin/sonic-pi "$@" &
+SONIC_PI_PID=$!
+
+# Run the autoconnect script in the background
+# It will wait for SuperCollider to start and then connect ports
+~/.local/bin/supercollider-autoconnect.sh &
+
+# Wait for Sonic Pi to finish
+wait $SONIC_PI_PID

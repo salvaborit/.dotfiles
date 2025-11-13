@@ -1,0 +1,28 @@
+#!/bin/bash
+# Launch web app or focus if already open
+# Usage: launch-or-focus-webapp <window-pattern> <url>
+
+if (($# < 2)); then
+  echo "Usage: launch-or-focus-webapp <window-pattern> <url>"
+  exit 1
+fi
+
+WINDOW_PATTERN="$1"
+URL="$2"
+
+# Ensure URL has protocol
+if [[ ! $URL =~ ^https?:// ]]; then
+  URL="https://$URL"
+fi
+
+# Find window matching the pattern
+WINDOW_ADDRESS=$(hyprctl clients -j | jq -r --arg p "$WINDOW_PATTERN" \
+  '.[]|select((.class|test("\\b" + $p + "\\b";"i")) or (.title|test("\\b" + $p + "\\b";"i")))|.address' | head -n1)
+
+if [[ -n $WINDOW_ADDRESS ]]; then
+  # Window exists, focus it
+  hyprctl dispatch focuswindow "address:$WINDOW_ADDRESS"
+else
+  # Launch webapp
+  launch-webapp "$URL"
+fi
