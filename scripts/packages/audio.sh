@@ -10,17 +10,25 @@ install_audio_stack() {
     log_info "Installing audio stack (Sonic Pi)..."
     echo ""
 
+    # Official repository packages
     local packages=(
-        "sonic-pi"
         "supercollider"
-        "jack-example-tools"
-        "sc3-plugins"
         "pipewire"
         "pipewire-jack"
         "wireplumber"
     )
 
     install_packages "${packages[@]}"
+
+    # AUR packages
+    echo ""
+    local aur_packages=(
+        "sonic-pi"
+        "jack-example-tools"
+        "sc3-plugins"
+    )
+
+    install_aur_packages "${aur_packages[@]}"
 
     if is_installed "pipewire"; then
         log_info "Enabling audio services..."

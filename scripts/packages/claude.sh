@@ -6,10 +6,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../common.sh"
 
 install_claude_code() {
-    log_info "Installing Claude Code..."
+    log_info "Checking for Claude Code..."
     echo ""
 
-    if command_exists claude; then
+    # Check if claude is in PATH or in common installation locations
+    if command_exists claude || [ -f "$HOME/.local/bin/claude" ] || [ -f "/usr/local/bin/claude" ]; then
         log_success "Claude Code is already installed"
         return 0
     fi
