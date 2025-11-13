@@ -102,7 +102,6 @@ See `~/.config/hypr/bindings.conf` for complete list.
 Located in `~/.local/bin/`:
 - `launch-or-focus` - Launch app or focus if running
 - `launch-browser` - Smart browser launcher
-- `launch-terminal-cwd` - Terminal in current directory
 - `launch-webapp` - Open URL in browser
 - `launch-or-focus-webapp` - Focus or launch web app
 

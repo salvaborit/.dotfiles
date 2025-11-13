@@ -74,7 +74,6 @@ dotfiles/
 │   └── .local/bin/
 │       ├── launch-or-focus
 │       ├── launch-browser
-│       ├── launch-terminal-cwd
 │       ├── launch-webapp
 │       ├── launch-or-focus-webapp
 │       ├── sonic-pi-with-audio

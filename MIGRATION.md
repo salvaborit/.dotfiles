@@ -24,7 +24,6 @@ This document tracks the migration from Omarchy-based dotfiles to vanilla Arch +
 |----------------|-------------|
 | `omarchy-launch-browser` | `launch-browser` |
 | `omarchy-launch-or-focus` | `launch-or-focus` |
-| `omarchy-cmd-terminal-cwd` | `launch-terminal-cwd` |
 | `omarchy-launch-webapp` | `launch-webapp` |
 | `omarchy-launch-or-focus-webapp` | `launch-or-focus-webapp` |
 | `omarchy-menu` | `walker` |
@@ -79,10 +78,6 @@ Uses `hyprctl clients` and `jq` to find windows.
 
 ### launch-browser
 Detects default browser via xdg-settings, handles private/incognito mode.
-
-### launch-terminal-cwd
-Opens terminal in the working directory of the currently active terminal.
-Falls back to $HOME if unable to determine.
 
 ### launch-webapp
 Opens URL in default browser, ensures https:// protocol.
