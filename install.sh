@@ -64,6 +64,68 @@ echo ""
 
 cd "$DOTFILES_DIR"
 
+# Backup existing files that would conflict
+BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
+BACKUP_NEEDED=false
+
+# Function to backup file/directory if it exists and is not a symlink
+backup_if_needed() {
+  local path="$1"
+  if [ -e "$path" ] && [ ! -L "$path" ]; then
+    if [ "$BACKUP_NEEDED" = false ]; then
+      mkdir -p "$BACKUP_DIR"
+      log_info "Creating backup directory: $BACKUP_DIR"
+      BACKUP_NEEDED=true
+    fi
+
+    local relative_path="${path#$HOME/}"
+    local backup_path="$BACKUP_DIR/$relative_path"
+    mkdir -p "$(dirname "$backup_path")"
+
+    # Use cp -a to preserve structure for directories, then remove original
+    if [ -d "$path" ]; then
+      cp -a "$path" "$(dirname "$backup_path")/"
+      rm -rf "$path"
+      log_info "Backed up directory: ~/$relative_path"
+    else
+      mv "$path" "$backup_path"
+      log_info "Backed up file: ~/$relative_path"
+    fi
+  fi
+}
+
+# Check and backup conflicting files/directories
+log_info "Checking for conflicting files and directories..."
+# Individual files that aren't symlinks
+backup_if_needed "$HOME/.bashrc"
+backup_if_needed "$HOME/.vimrc"
+
+# For directories: only backup if they exist as real directories (not symlinks)
+# This allows stow to create directory-level symlinks
+for dir in \
+  "$HOME/.config/hypr" \
+  "$HOME/.config/alacritty" \
+  "$HOME/.config/waybar" \
+  "$HOME/.config/nvim" \
+  "$HOME/.config/themes" \
+  "$HOME/.config/rofi" \
+  "$HOME/.local/bin"; do
+
+  # Only backup if it's a real directory (not a symlink)
+  if [ -d "$dir" ] && [ ! -L "$dir" ]; then
+    # Check if this directory would conflict with stow
+    # (i.e., stow wants to create it as a symlink)
+    backup_if_needed "$dir"
+  fi
+done
+
+# If backups were made, inform user
+if [ "$BACKUP_NEEDED" = true ]; then
+  echo ""
+  log_success "Existing files backed up to: $BACKUP_DIR"
+  echo ""
+fi
+
 # Stow packages
 STOW_PACKAGES=(
   "shell"
@@ -77,14 +139,71 @@ STOW_PACKAGES=(
   "rofi"
 )
 
+STOW_SUCCESS=()
+STOW_FAILED=()
+
 for package in "${STOW_PACKAGES[@]}"; do
   log_info "Stowing $package..."
-  if stow -v "$package" 2>&1 | grep -q "LINK"; then
+
+  # First unstow to clean up any old symlinks, then restow fresh
+  # This ensures clean deployment even if previous symlinks were broken
+  stow --delete "$package" 2>/dev/null || true
+
+  # Run stow and capture output
+  # Use --restow to replace existing symlinks, --verbose to see what's happening
+  if stow_output=$(stow --restow --verbose=2 "$package" 2>&1); then
+    STOW_SUCCESS+=("$package")
     log_success "$package deployed"
   else
-    log_warning "$package may already be deployed"
+    STOW_FAILED+=("$package")
+    log_error "$package failed to deploy"
+    echo "$stow_output" | grep -i "conflict\|error" || true
   fi
 done
+
+echo ""
+
+# Verify symlinks were created
+log_info "Verifying symlink deployment..."
+VERIFY_PATHS=(
+  "$HOME/.bashrc:shell"
+  "$HOME/.config/hypr/hyprland.conf:hyprland"
+  "$HOME/.config/waybar:waybar"
+  "$HOME/.config/alacritty:terminal"
+  "$HOME/.config/nvim:neovim"
+  "$HOME/.local/bin/screenshot:scripts-local"
+  "$HOME/.config/themes:themes"
+  "$HOME/.config/rofi:rofi"
+)
+
+VERIFY_SUCCESS=0
+VERIFY_FAILED=0
+
+for item in "${VERIFY_PATHS[@]}"; do
+  path="${item%%:*}"
+  package="${item##*:}"
+
+  # Check if path is a symlink or exists under a symlinked directory
+  if [ -L "$path" ]; then
+    VERIFY_SUCCESS=$((VERIFY_SUCCESS + 1))
+    log_success "✓ $path (package: $package)"
+  elif [ -e "$path" ]; then
+    VERIFY_FAILED=$((VERIFY_FAILED + 1))
+    log_warning "✗ Not a symlink: $path (package: $package)"
+  else
+    VERIFY_FAILED=$((VERIFY_FAILED + 1))
+    log_error "✗ Missing: $path (package: $package)"
+  fi
+done
+
+echo ""
+log_success "Symlinks verified: $VERIFY_SUCCESS/$((VERIFY_SUCCESS + VERIFY_FAILED)) successful"
+
+if [ $VERIFY_FAILED -gt 0 ]; then
+  log_warning "$VERIFY_FAILED items were not deployed properly"
+else
+  log_success "All dotfiles successfully deployed with GNU stow!"
+fi
 
 echo ""
 log_success "Dotfiles deployment complete!"
