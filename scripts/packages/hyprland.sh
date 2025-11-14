@@ -13,6 +13,7 @@ install_hyprland_stack() {
     local packages=(
         "hyprland"
         "waybar"
+        "rofi"                          # Application launcher
         "mako"                          # Notification daemon
         "swaylock"                      # Screen lock
         "hypridle"                      # Idle management
