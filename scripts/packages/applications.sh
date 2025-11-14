@@ -14,6 +14,7 @@ install_applications() {
         "obsidian"
         "nautilus"          # File manager
         "chromium"          # Web browser
+        "libreoffice-still" # Office suite
     )
 
     install_packages "${packages[@]}"
@@ -22,6 +23,7 @@ install_applications() {
     echo ""
     local aur_packages=(
         "satty"                 # Screenshot annotation tool
+        "slack-desktop"         # Team communication
     )
 
     install_aur_packages "${aur_packages[@]}"
