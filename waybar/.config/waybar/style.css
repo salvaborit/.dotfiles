@@ -11,7 +11,7 @@
 }
 
 .modules-left, .modules-right, .modules-center {
-    background-color: alpha(@background, 0.01);
+    background-color: alpha(@background, 0.7);
     border: 1px solid alpha(@foreground, 0.125);
     min-height: 24px;
     border-radius: 11px;
