@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=ChatGPT
+Comment=ChatGPT AI Assistant
+Icon=chatgpt
+Exec=chromium --app=https://chatgpt.com
+Categories=Network;WebBrowser;
+StartupNotify=true
+Terminal=false

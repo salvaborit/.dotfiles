@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=X (Twitter)
+Comment=X Social Network
+Icon=twitter
+Exec=chromium --app=https://x.com
+Categories=Network;Social;
+StartupNotify=true
+Terminal=false

@@ -151,7 +151,14 @@ for package in "${STOW_PACKAGES[@]}"; do
 
   # Run stow and capture output
   # Use --restow to replace existing symlinks, --verbose to see what's happening
-  if stow_output=$(stow --restow --verbose=2 "$package" 2>&1); then
+  # Use --no-folding for scripts-local to create individual file symlinks
+  if [ "$package" = "scripts-local" ]; then
+    stow_cmd="stow --restow --no-folding --verbose=2"
+  else
+    stow_cmd="stow --restow --verbose=2"
+  fi
+
+  if stow_output=$($stow_cmd "$package" 2>&1); then
     STOW_SUCCESS+=("$package")
     log_success "$package deployed"
   else

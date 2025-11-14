@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=HEY Email
+Comment=HEY Email Web App
+Icon=mail
+Exec=chromium --app=https://app.hey.com
+Categories=Network;Email;
+StartupNotify=true
+Terminal=false

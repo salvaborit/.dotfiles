@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=YouTube
+Comment=YouTube Video Platform
+Icon=youtube
+Exec=chromium --app=https://youtube.com
+Categories=Network;AudioVideo;
+StartupNotify=true
+Terminal=false

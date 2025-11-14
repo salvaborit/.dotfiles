@@ -1,13 +1,36 @@
 #!/bin/bash
-# Launch a web application in the default browser
-# Usage: launch-webapp <url>
+# Launch a web application via uwsm or default browser
+# Usage: launch-webapp <desktop-id-or-url>
 
 if [[ -z $1 ]]; then
-  echo "Usage: launch-webapp <url>"
+  echo "Usage: launch-webapp <desktop-id-or-url>"
   exit 1
 fi
 
-url="$1"
+input="$1"
+
+# Check if input is a .desktop ID (no protocol and ends with -webapp)
+if [[ ! $input =~ ^https?:// ]] && [[ $input == *-webapp ]]; then
+  desktop_id="$input"
+
+  # Add .desktop extension if not present
+  [[ ! $desktop_id =~ \.desktop$ ]] && desktop_id="${desktop_id}.desktop"
+
+  # Launch via uwsm if available and .desktop file exists
+  if command -v uwsm &>/dev/null; then
+    # Check if .desktop file exists in standard locations
+    for dir in ~/.local/share/applications /usr/share/applications /usr/local/share/applications; do
+      if [[ -f "$dir/$desktop_id" ]]; then
+        exec uwsm app -- "$desktop_id" &
+        exit 0
+      fi
+    done
+    echo "Warning: .desktop file '$desktop_id' not found, falling back to direct launch"
+  fi
+fi
+
+# Fallback: treat as URL and launch in browser
+url="$input"
 
 # Ensure URL has protocol
 if [[ ! $url =~ ^https?:// ]]; then
@@ -24,4 +47,4 @@ else
     {~/.local,/usr}/share/applications/$default_browser 2>/dev/null | head -1)
 fi
 
-exec $browser_exec "$url" &
+exec $browser_exec --app="$url" &

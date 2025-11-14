@@ -28,6 +28,7 @@ alias gitd='git diff'
 alias gits='git status'
 alias d='docker'
 alias g='git'
+alias p='sudo pacman'
 
 alias pingpi='ping 192.168.1.12'
 

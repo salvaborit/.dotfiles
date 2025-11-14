@@ -28,5 +28,10 @@ install_claude_code() {
 
 # Run if executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    install_claude_code
+    start_timer "$(basename "$0")"
+    if install_claude_code; then
+        end_timer "success"
+    else
+        end_timer "failed"
+    fi
 fi

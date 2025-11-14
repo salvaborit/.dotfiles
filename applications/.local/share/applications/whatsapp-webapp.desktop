@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=WhatsApp
+Comment=WhatsApp Web
+Icon=whatsapp
+Exec=chromium --app=https://web.whatsapp.com
+Categories=Network;InstantMessaging;
+StartupNotify=true
+Terminal=false

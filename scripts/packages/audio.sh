@@ -40,5 +40,10 @@ install_audio_stack() {
 
 # Run if executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    install_audio_stack
+    start_timer "$(basename "$0")"
+    if install_audio_stack; then
+        end_timer "success"
+    else
+        end_timer "failed"
+    fi
 fi

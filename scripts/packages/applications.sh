@@ -35,5 +35,10 @@ install_applications() {
 
 # Run if executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  install_applications
+  start_timer "$(basename "$0")"
+  if install_applications; then
+    end_timer "success"
+  else
+    end_timer "failed"
+  fi
 fi

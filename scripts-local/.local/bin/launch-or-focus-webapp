@@ -1,19 +1,14 @@
 #!/bin/bash
 # Launch web app or focus if already open
-# Usage: launch-or-focus-webapp <window-pattern> <url>
+# Usage: launch-or-focus-webapp <window-pattern> <desktop-id-or-url>
 
 if (($# < 2)); then
-  echo "Usage: launch-or-focus-webapp <window-pattern> <url>"
+  echo "Usage: launch-or-focus-webapp <window-pattern> <desktop-id-or-url>"
   exit 1
 fi
 
 WINDOW_PATTERN="$1"
-URL="$2"
-
-# Ensure URL has protocol
-if [[ ! $URL =~ ^https?:// ]]; then
-  URL="https://$URL"
-fi
+INPUT="$2"
 
 # Find window matching the pattern
 WINDOW_ADDRESS=$(hyprctl clients -j | jq -r --arg p "$WINDOW_PATTERN" \
@@ -23,6 +18,6 @@ if [[ -n $WINDOW_ADDRESS ]]; then
   # Window exists, focus it
   hyprctl dispatch focuswindow "address:$WINDOW_ADDRESS"
 else
-  # Launch webapp
-  launch-webapp "$URL"
+  # Launch webapp (supports both .desktop IDs and URLs)
+  launch-webapp "$INPUT"
 fi

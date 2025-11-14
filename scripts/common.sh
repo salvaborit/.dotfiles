@@ -207,3 +207,35 @@ install_aur_packages() {
 
     return 0
 }
+
+# Timer functions for installation tracking
+TIMER_START_TIME=""
+TIMER_SCRIPT_NAME=""
+TIMER_LOG_FILE="$HOME/.dotfiles-install.log"
+
+# Start timing an installation script
+start_timer() {
+    TIMER_SCRIPT_NAME="$1"
+    TIMER_START_TIME=$(date +%s)
+
+    # Create log file with header if it doesn't exist
+    if [[ ! -f "$TIMER_LOG_FILE" ]]; then
+        echo "Script,Start,End,Duration_Seconds,Status" > "$TIMER_LOG_FILE"
+    fi
+}
+
+# End timing and log results to CSV
+end_timer() {
+    local status="${1:-success}"
+    local end_time=$(date +%s)
+    local duration=$((end_time - TIMER_START_TIME))
+
+    local start_timestamp=$(date -d "@$TIMER_START_TIME" '+%Y-%m-%d %H:%M:%S')
+    local end_timestamp=$(date -d "@$end_time" '+%Y-%m-%d %H:%M:%S')
+
+    # Append CSV row
+    echo "$TIMER_SCRIPT_NAME,$start_timestamp,$end_timestamp,$duration,$status" >> "$TIMER_LOG_FILE"
+
+    # Log completion message
+    log_success "Timing: $TIMER_SCRIPT_NAME completed in ${duration}s (logged to ~/.dotfiles-install.log)"
+}

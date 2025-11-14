@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Google Calendar
+Comment=Google Calendar Web App
+Icon=google-calendar
+Exec=chromium --app=https://calendar.google.com/calendar/u/0/r
+Categories=Office;Calendar;
+StartupNotify=true
+Terminal=false
