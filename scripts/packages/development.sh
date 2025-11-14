@@ -21,6 +21,15 @@ install_development_tools() {
 
   install_packages "${packages[@]}"
 
+  # AUR packages
+  echo ""
+  local aur_packages=(
+    "postman-bin"
+    "intellij-idea-ultimate-edition"
+  )
+
+  install_aur_packages "${aur_packages[@]}"
+
   # Enable and start docker service
   if is_installed "docker"; then
     if ! systemctl is-enabled docker &>/dev/null; then
