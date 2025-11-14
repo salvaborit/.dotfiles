@@ -32,7 +32,7 @@ mainbox {
     spacing:      30px ;
     children:     [ "inputbar","message","mode-switcher","listview" ];
     border:       1px ;
-    border-radius: 25px;
+    border-radius: 16px;
 }
 inputbar {
     padding:  0px 30px ;
