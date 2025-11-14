@@ -29,7 +29,7 @@ install_hyprland_stack() {
         "qt5-wayland"                   # Qt5 Wayland support
         "qt6-wayland"                   # Qt6 Wayland support
         "xorg-xwayland"                 # X11 compatibility
-        "imagemagick"                   # Image processing (for elephant)
+        "imagemagick"                   # Image processing
         "ffmpeg"                        # Video processing (for screenrecord)
         "v4l-utils"                     # Webcam support (for screenrecord)
     )
@@ -39,9 +39,6 @@ install_hyprland_stack() {
     # AUR packages
     echo ""
     local aur_packages=(
-        "walker"                        # Application launcher
-        "elephant"                      # Clipboard history backend
-        "elephant-clipboard"            # Clipboard provider for walker
         "gpu-screen-recorder"           # Hardware-accelerated screen recording
         "wayfreeze"                     # Screen freeze for screenshots
     )

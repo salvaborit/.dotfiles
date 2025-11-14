@@ -1,3 +1,6 @@
+@define-color background #1e1e2e;
+@define-color foreground #cdd6f4;
+
 * {
     background-color: transparent;
     color: @foreground;
@@ -11,8 +14,8 @@
 }
 
 .modules-left, .modules-right, .modules-center {
-    background-color: alpha(@background, 0.7);
-    border: 1px solid alpha(@foreground, 0.125);
+    background-color: alpha(@background, 0.01);
+    border: 1px solid alpha(@foreground, 0.2);
     min-height: 24px;
     border-radius: 11px;
     margin: 4px 4px 2px 4px;
