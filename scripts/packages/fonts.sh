@@ -35,5 +35,10 @@ install_fonts() {
 
 # Run if executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    install_fonts
+    start_timer "$(basename "$0")"
+    if install_fonts; then
+        end_timer "success"
+    else
+        end_timer "failed"
+    fi
 fi

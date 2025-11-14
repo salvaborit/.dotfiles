@@ -24,5 +24,10 @@ install_core_packages() {
 
 # Run if executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    install_core_packages
+    start_timer "$(basename "$0")"
+    if install_core_packages; then
+        end_timer "success"
+    else
+        end_timer "failed"
+    fi
 fi

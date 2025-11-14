@@ -51,5 +51,10 @@ install_hyprland_stack() {
 
 # Run if executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    install_hyprland_stack
+    start_timer "$(basename "$0")"
+    if install_hyprland_stack; then
+        end_timer "success"
+    else
+        end_timer "failed"
+    fi
 fi
