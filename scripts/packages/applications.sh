@@ -12,10 +12,11 @@ install_applications() {
   # Official repository packages
   local packages=(
     "obsidian"
-    "fastfetch"         # system info
-    "nautilus"          # File manager
-    "chromium"          # Web browser
-    "libreoffice-still" # Office suite
+    "fastfetch"
+    "nautilus"
+    "chromium"
+    "libreoffice-still"
+    "spotify-launcher"
   )
 
   install_packages "${packages[@]}"
@@ -23,8 +24,8 @@ install_applications() {
   # AUR packages
   echo ""
   local aur_packages=(
-    "satty"         # Screenshot annotation tool
-    "slack-desktop" # Team communication
+    "satty" # Screenshot annotation tool
+    "slack-desktop"
   )
 
   install_aur_packages "${aur_packages[@]}"
