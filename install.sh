@@ -137,6 +137,7 @@ STOW_PACKAGES=(
   "scripts-local"
   "applications"
   "rofi"
+  "swayosd"
 )
 
 STOW_SUCCESS=()
@@ -182,6 +183,7 @@ VERIFY_PATHS=(
   "$HOME/.local/bin/claude:scripts-local"
   "$HOME/.config/themes:themes"
   "$HOME/.config/rofi:rofi"
+  "$HOME/.config/swayosd/style.css:swayosd"
 )
 
 VERIFY_SUCCESS=0

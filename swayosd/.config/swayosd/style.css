@@ -1,0 +1,53 @@
+/* SwayOSD Frosted Glass Theme
+ * Matches waybar and rofi aesthetic
+ * Colors from themes/main-theme/colors.conf
+ */
+
+
+@define-color background #1e1e2e;
+
+window#osd {
+  /* Frosted glass appearance - 20px radius */
+  border-radius: 14px; 
+  border: 0.5px solid rgba(205, 214, 244, 0.2);
+  /* Very low opacity background - frosted glass effect comes from Hyprland blur */
+  background: alpha(@background, 0.01);
+  padding: 0;
+}
+
+window#osd #container {
+  margin: 16px;
+}
+
+window#osd image,
+window#osd label {
+  color: alpha(#cdd6f4, 0.75);
+}
+
+window#osd progressbar:disabled,
+window#osd image:disabled {
+  opacity: 0.5;
+}
+
+window#osd progressbar {
+  min-height: 6px;
+  border-radius: 3px;
+  background: transparent;
+  border: none;
+}
+
+window#osd trough {
+  min-height: inherit;
+  border-radius: inherit;
+  border: none;
+  /* Subtle trough background - 20% opacity foreground */
+  background: rgba(205, 214, 244, 0.2);
+}
+
+window#osd progress {
+  min-height: inherit;
+  border-radius: inherit;
+  border: none;
+  /* Progress bar in foreground color */
+  background: alpha(#cdd6f4, 0.7);
+}
