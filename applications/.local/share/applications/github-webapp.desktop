@@ -7,5 +7,5 @@ Icon=github
 Exec=chromium --app=https://github.com
 Categories=Network;WebBrowser;
 StartupNotify=true
-Terminal=false dotfiles
+Terminal=false
 
