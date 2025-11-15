@@ -6,7 +6,7 @@ set -euo pipefail
 
 # Get list of existing sessions
 get_sessions() {
-  if tmux list ls 2>/dev/null; then
+  if tmux ls 2>/dev/null; then
     return 0
   else
     return 1
@@ -66,8 +66,19 @@ main() {
   # Extract session name (remove status indicators)
   session_name=$(echo "$choice" | sed -E 's/^(✓|○) //' | awk '{print $1}')
 
-  # Attach to existing session in alacritty
-  alacritty -e tmux attach-session -t "$session_name" &
+  # Get number of windows in session and launch separate terminal for each
+  num_windows=$(tmux list-windows -t "$session_name" 2>/dev/null | wc -l)
+
+  if [ "$num_windows" -eq 0 ]; then
+    # Fallback: single window
+    alacritty -e tmux attach-session -t "$session_name" &
+  else
+    # Launch separate terminal for each window
+    for ((i = 1; i <= num_windows; i++)); do
+      tmux-window-terminal "$session_name" "$i"
+      sleep 0.1
+    done
+  fi
 }
 
 main "$@"

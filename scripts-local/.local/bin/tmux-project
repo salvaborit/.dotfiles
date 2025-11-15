@@ -24,36 +24,41 @@ session_name_from_path() {
   basename "$project_path" | tr '.' '_'
 }
 
-# Create project session with layout
-create_project_session() {
+# Create project sessions (3 separate sessions)
+create_project_sessions() {
   local project_path="$1"
-  local session_name="$2"
+  local base_name="$2"
 
-  # Check if session already exists
-  if tmux has-session -t "$session_name" 2>/dev/null; then
-    echo "Session '$session_name' already exists"
+  # Session names for each terminal
+  local editor_session="${base_name}-editor"
+  local terminal_session="${base_name}-terminal"
+  local git_session="${base_name}-git"
+
+  # Check if sessions already exist
+  if tmux has-session -t "$editor_session" 2>/dev/null; then
+    echo "Sessions for '$base_name' already exist"
     return 1
   fi
 
-  # Create new session in project directory
-  tmux new-session -d -s "$session_name" -c "$project_path"
+  # Create 3 separate sessions, each with 1 window
 
-  # Window 1: Editor (already created)
-  tmux rename-window -t "$session_name:1" "editor"
+  # Session 1: Editor (nvim)
+  tmux new-session -d -s "$editor_session" -c "$project_path"
+  tmux rename-window -t "$editor_session:1" "editor"
+  tmux send-keys -t "$editor_session:1" "nvim" C-m
 
-  # Window 2: Terminal
-  tmux new-window -t "$session_name:2" -n "terminal" -c "$project_path"
-
-  # Window 3: Git (lazygit if available)
-  tmux new-window -t "$session_name:3" -n "git" -c "$project_path"
+  # Session 2: Git (lazygit)
+  tmux new-session -d -s "$git_session" -c "$project_path"
+  tmux rename-window -t "$git_session:1" "git"
   if command -v lazygit &>/dev/null; then
-    tmux send-keys -t "$session_name:3" "lazygit" C-m
+    tmux send-keys -t "$git_session:1" "lazygit" C-m
   fi
 
-  # Select first window
-  tmux select-window -t "$session_name:1"
+  # Session 3: Terminal (bash)
+  tmux new-session -d -s "$terminal_session" -c "$project_path"
+  tmux rename-window -t "$terminal_session:1" "terminal"
 
-  echo "Created session '$session_name' for project: $project_path"
+  echo "Created sessions for project: $project_path"
 }
 
 # Main logic
@@ -89,23 +94,36 @@ main() {
     fi
   fi
 
-  # Create session
-  session_name=$(session_name_from_path "$selected")
+  # Create sessions
+  base_name=$(session_name_from_path "$selected")
+  editor_session="${base_name}-editor"
+  terminal_session="${base_name}-terminal"
+  git_session="${base_name}-git"
 
-  if create_project_session "$selected" "$session_name"; then
-    # If inside tmux, switch to new session
+  if create_project_sessions "$selected" "$base_name"; then
+    # Sessions created - launch separate terminals in order: nvim, lazygit, bash
     if [ -n "${TMUX:-}" ]; then
-      tmux switch-client -t "$session_name"
+      # Inside tmux, just switch to editor session
+      tmux switch-client -t "$editor_session"
     else
-      # Otherwise attach in new alacritty window
-      alacritty -e tmux attach-session -t "$session_name" &
+      # Launch 3 separate Alacritty terminals in order
+      alacritty -e tmux attach-session -t "$editor_session" &
+      sleep 0.1
+      alacritty -e tmux attach-session -t "$git_session" &
+      sleep 0.1
+      alacritty -e tmux attach-session -t "$terminal_session" &
     fi
   else
-    # Session exists, just attach/switch
+    # Sessions exist - reattach to them in same order
     if [ -n "${TMUX:-}" ]; then
-      tmux switch-client -t "$session_name"
+      tmux switch-client -t "$editor_session"
     else
-      alacritty -e tmux attach-session -t "$session_name" &
+      # Reattach to existing sessions
+      alacritty -e tmux attach-session -t "$editor_session" &
+      sleep 0.1
+      alacritty -e tmux attach-session -t "$git_session" &
+      sleep 0.1
+      alacritty -e tmux attach-session -t "$terminal_session" &
     fi
   fi
 }

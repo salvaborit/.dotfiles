@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Launch Alacritty attached to specific tmux window
+# Usage: tmux-window-terminal <session> <window>
+
+set -euo pipefail
+
+if [ $# -ne 2 ]; then
+    echo "Usage: tmux-window-terminal <session> <window>"
+    exit 1
+fi
+
+SESSION="$1"
+WINDOW="$2"
+
+# Check if session exists
+if ! tmux has-session -t "$SESSION" 2>/dev/null; then
+    echo "Error: Session '$SESSION' does not exist"
+    exit 1
+fi
+
+# Launch Alacritty with tmux attached to specific window and STAY on that window
+# The key is: attach to session, then select and lock to specific window
+alacritty -e bash -c "tmux attach-session -t '${SESSION}' \\; select-window -t '${WINDOW}'" &
