@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# Toggle show desktop - Hide/show all windows on current workspace
+# Uses special workspace named "desktop" to hide windows
+# Maintains per-workspace state
+
+TMP_FILE="$XDG_RUNTIME_DIR/hyprland-show-desktop"
+
+# Get current workspace name
+CURRENT_WORKSPACE=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .activeWorkspace.name')
+
+# Check if we're currently showing desktop (state file exists)
+if [ -s "$TMP_FILE-$CURRENT_WORKSPACE" ]; then
+  # Restore windows from desktop
+  readarray -d $'\n' -t ADDRESS_ARRAY < "$TMP_FILE-$CURRENT_WORKSPACE"
+
+  CMDS=""
+  for address in "${ADDRESS_ARRAY[@]}"; do
+    # Skip empty lines
+    if [[ -n "$address" ]]; then
+      CMDS+="dispatch movetoworkspacesilent name:$CURRENT_WORKSPACE,address:$address;"
+    fi
+  done
+
+  # Execute batch commands to restore windows
+  if [[ -n "$CMDS" ]]; then
+    hyprctl --batch "$CMDS"
+  fi
+
+  # Remove state file
+  rm "$TMP_FILE-$CURRENT_WORKSPACE"
+else
+  # Hide all windows to desktop
+  HIDDEN_WINDOWS=$(hyprctl clients -j | jq -r --arg CW "$CURRENT_WORKSPACE" '.[] | select(.workspace.name == $CW) | .address')
+
+  readarray -d $'\n' -t ADDRESS_ARRAY <<< "$HIDDEN_WINDOWS"
+
+  CMDS=""
+  TMP_ADDRESS=""
+  for address in "${ADDRESS_ARRAY[@]}"; do
+    # Remove quotes and whitespace
+    address=$(echo "$address" | tr -d '"' | xargs)
+
+    if [[ -n "$address" ]]; then
+      TMP_ADDRESS+="$address"$'\n'
+      CMDS+="dispatch movetoworkspacesilent special:desktop,address:$address;"
+    fi
+  done
+
+  # Execute batch commands to hide windows
+  if [[ -n "$CMDS" ]]; then
+    hyprctl --batch "$CMDS"
+  fi
+
+  # Save addresses to state file (remove trailing empty lines)
+  if [[ -n "$TMP_ADDRESS" ]]; then
+    echo -n "$TMP_ADDRESS" | sed -e '/^$/d' > "$TMP_FILE-$CURRENT_WORKSPACE"
+  fi
+fi
