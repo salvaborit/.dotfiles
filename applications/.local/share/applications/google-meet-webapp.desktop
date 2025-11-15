@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Google Meet
+Comment=Google Meet Web App
+Icon=google-calendar
+Exec=chromium --app=https://meet.google.com/landing
+Categories=Office;Video;
+StartupNotify=true
+Terminal=false

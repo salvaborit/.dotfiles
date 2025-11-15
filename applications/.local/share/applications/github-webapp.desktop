@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Github
+Comment=GitHub
+Icon=github
+Exec=chromium --app=https://github.com
+Categories=Network;WebBrowser;
+StartupNotify=true
+Terminal=false dotfiles
+
