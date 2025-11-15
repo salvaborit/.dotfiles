@@ -16,7 +16,7 @@ install_development_tools() {
     "neovim"
 
     "jdk21-openjdk"
-    "java-openjdk"
+    "jdk-openjdk"
     "maven"
 
     "nodejs-lts-jod"
