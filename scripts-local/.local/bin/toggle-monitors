@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Toggle between two monitor layouts for bottom row
+# Layout 1: M14D left, Laptop right
+# Layout 2: Laptop left, M14D right
+
+STATE_FILE="$HOME/.cache/monitor-layout-state"
+
+# Create cache directory if it doesn't exist
+mkdir -p "$(dirname "$STATE_FILE")"
+
+# Read current state (default to layout2 if file doesn't exist)
+if [ -f "$STATE_FILE" ]; then
+    CURRENT_LAYOUT=$(cat "$STATE_FILE")
+else
+    CURRENT_LAYOUT="layout2"
+fi
+
+# Toggle and apply new layout
+if [ "$CURRENT_LAYOUT" = "layout1" ]; then
+    # Switch to Layout 2: Laptop left, M14D right
+    hyprctl keyword monitor "eDP-1, 1920x1200@60, 0x1080, 1.00"
+    hyprctl keyword monitor "DP-3, 2240x1400@60, 1920x1080, 1.00"
+    echo "layout2" > "$STATE_FILE"
+    notify-send -t 2000 "Monitor Layout" "Laptop Left | M14D Right"
+else
+    # Switch to Layout 1: M14D left, Laptop right
+    hyprctl keyword monitor "DP-3, 2240x1400@60, 0x1080, 1.00"
+    hyprctl keyword monitor "eDP-1, 1920x1200@60, 2240x1080, 1.00"
+    echo "layout1" > "$STATE_FILE"
+    notify-send -t 2000 "Monitor Layout" "M14D Left | Laptop Right"
+fi
