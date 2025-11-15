@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+# Tmux project session automation
+# Auto-creates tmux sessions for project directories with configured layout
+
+set -euo pipefail
+
+# Default project directories to search
+PROJECT_DIRS=(
+  "$HOME/prj"
+)
+
+# Find all project directories (max depth 2)
+find_projects() {
+  for dir in "${PROJECT_DIRS[@]}"; do
+    if [ -d "$dir" ]; then
+      find "$dir" -maxdepth 2 -type d -name ".git" -exec dirname {} \; 2>/dev/null
+    fi
+  done | sort -u
+}
+
+# Create session name from project path
+session_name_from_path() {
+  local project_path="$1"
+  basename "$project_path" | tr '.' '_'
+}
+
+# Create project session with layout
+create_project_session() {
+  local project_path="$1"
+  local session_name="$2"
+
+  # Check if session already exists
+  if tmux has-session -t "$session_name" 2>/dev/null; then
+    echo "Session '$session_name' already exists"
+    return 1
+  fi
+
+  # Create new session in project directory
+  tmux new-session -d -s "$session_name" -c "$project_path"
+
+  # Window 1: Editor (already created)
+  tmux rename-window -t "$session_name:1" "editor"
+
+  # Window 2: Terminal
+  tmux new-window -t "$session_name:2" -n "terminal" -c "$project_path"
+
+  # Window 3: Git (lazygit if available)
+  tmux new-window -t "$session_name:3" -n "git" -c "$project_path"
+  if command -v lazygit &>/dev/null; then
+    tmux send-keys -t "$session_name:3" "lazygit" C-m
+  fi
+
+  # Select first window
+  tmux select-window -t "$session_name:1"
+
+  echo "Created session '$session_name' for project: $project_path"
+}
+
+# Main logic
+main() {
+  # Check if tmux is installed
+  if ! command -v tmux &>/dev/null; then
+    echo "Error: tmux is not installed"
+    exit 1
+  fi
+
+  # If no argument, show project picker
+  if [ $# -eq 0 ]; then
+    projects=$(find_projects)
+
+    if [ -z "$projects" ]; then
+      echo "No projects found in: ${PROJECT_DIRS[*]}"
+      exit 1
+    fi
+
+    # Use rofi to select project
+    selected=$(echo "$projects" | rofi -dmenu -p "Select project for tmux session")
+
+    if [ -z "$selected" ]; then
+      exit 0
+    fi
+  else
+    # Use provided directory
+    selected="$1"
+
+    if [ ! -d "$selected" ]; then
+      echo "Error: Directory not found: $selected"
+      exit 1
+    fi
+  fi
+
+  # Create session
+  session_name=$(session_name_from_path "$selected")
+
+  if create_project_session "$selected" "$session_name"; then
+    # If inside tmux, switch to new session
+    if [ -n "${TMUX:-}" ]; then
+      tmux switch-client -t "$session_name"
+    else
+      # Otherwise attach in new alacritty window
+      alacritty -e tmux attach-session -t "$session_name" &
+    fi
+  else
+    # Session exists, just attach/switch
+    if [ -n "${TMUX:-}" ]; then
+      tmux switch-client -t "$session_name"
+    else
+      alacritty -e tmux attach-session -t "$session_name" &
+    fi
+  fi
+}
+
+main "$@"

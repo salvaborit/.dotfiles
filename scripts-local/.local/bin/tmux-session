@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Tmux session manager using walker
+# Creates, attaches, or switches tmux sessions
+
+set -euo pipefail
+
+# Get list of existing sessions
+get_sessions() {
+  if tmux list ls 2>/dev/null; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Create session list for walker
+create_menu() {
+  echo "📝 New Session"
+
+  if get_sessions >/dev/null 2>&1; then
+    get_sessions | while IFS=: read -r session rest; do
+      # Check if session is attached
+      attached=$(echo "$rest" | grep -o "attached" || echo "")
+      if [ -n "$attached" ]; then
+        echo "✓ $session (attached)"
+      else
+        echo "○ $session"
+      fi
+    done
+  fi
+}
+
+# Main logic
+main() {
+  # Check if tmux is installed
+  if ! command -v tmux &>/dev/null; then
+    notify-send "Tmux" "Tmux is not installed" -u critical
+    exit 1
+  fi
+
+  # If inside tmux, use built-in session switcher
+  if [ -n "${TMUX:-}" ]; then
+    tmux choose-tree -Zs
+    exit 0
+  fi
+
+  # Use rofi to select session
+  choice=$(create_menu | rofi -dmenu -p "Select tmux sesh")
+
+  if [ -z "$choice" ]; then
+    exit 0
+  fi
+
+  # Handle new session
+  if [[ "$choice" == "📝 New Session" ]]; then
+    session_name=$(echo "" | rofi -dmenu -p "New sesh name")
+    if [ -z "$session_name" ]; then
+      exit 0
+    fi
+
+    # Create and attach to new session in alacritty
+    alacritty -e tmux new-session -s "$session_name" &
+    exit 0
+  fi
+
+  # Extract session name (remove status indicators)
+  session_name=$(echo "$choice" | sed -E 's/^(✓|○) //' | awk '{print $1}')
+
+  # Attach to existing session in alacritty
+  alacritty -e tmux attach-session -t "$session_name" &
+}
+
+main "$@"
