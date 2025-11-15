@@ -1,0 +1,10 @@
+#!/bin/bash
+# Reload swayosd server to pick up style.css changes
+
+if pgrep -x swayosd-server >/dev/null; then
+  pkill -x swayosd-server
+  sleep 0.2
+fi
+
+swayosd-server >/dev/null 2>&1 &
+notify-send "SwayOSD" "OSD server reloaded"
