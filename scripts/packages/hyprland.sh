@@ -32,6 +32,8 @@ install_hyprland_stack() {
         "xorg-xwayland"                 # X11 compatibility
         "blueberry"                     # Bluetooth manager GUI
         "wiremix"                       # Audio mixer for PipeWire/PulseAudio
+        "brightnessctl"                 # LCD brightness control
+        "swayosd"                       # OSD for volume/brightness
         "imagemagick"                   # Image processing
         "ffmpeg"                        # Video processing (for screenrecord)
         "v4l-utils"                     # Webcam support (for screenrecord)
