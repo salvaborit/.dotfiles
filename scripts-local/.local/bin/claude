@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Wrapper for Claude Code to ensure it's always accessible from ~/.local/bin
+# This follows the dotfiles pattern where all user scripts are symlinked here
+
+# Try to find claude in common installation locations
+CLAUDE_BIN=""
+
+# Check npm global installation (most common)
+if [ -f "/usr/bin/claude" ]; then
+    CLAUDE_BIN="/usr/bin/claude"
+elif [ -f "/usr/local/bin/claude" ]; then
+    CLAUDE_BIN="/usr/local/bin/claude"
+elif [ -f "$HOME/.local/bin/claude-actual" ]; then
+    # Fallback to our own symlink if created by install script
+    CLAUDE_BIN="$HOME/.local/bin/claude-actual"
+elif command -v claude &> /dev/null; then
+    # Last resort: use whatever's in PATH
+    CLAUDE_BIN=$(command -v claude)
+fi
+
+if [ -z "$CLAUDE_BIN" ]; then
+    echo "Error: Claude Code not found. Please install it with:"
+    echo "  sudo npm install -g @anthropic-ai/claude-code"
+    exit 1
+fi
+
+# Execute claude with all arguments passed through
+exec "$CLAUDE_BIN" "$@"

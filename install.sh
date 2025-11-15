@@ -179,6 +179,7 @@ VERIFY_PATHS=(
   "$HOME/.config/alacritty:terminal"
   "$HOME/.config/nvim:neovim"
   "$HOME/.local/bin/screenshot:scripts-local"
+  "$HOME/.local/bin/claude:scripts-local"
   "$HOME/.config/themes:themes"
   "$HOME/.config/rofi:rofi"
 )
