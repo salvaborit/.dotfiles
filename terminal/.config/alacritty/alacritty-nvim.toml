@@ -33,12 +33,13 @@ cursor = "#cdd6f4"
 normal = { family = "SFMono Nerd Font" }
 bold = { family = "SFMono Nerd Font" }
 italic = { family = "SFMono Nerd Font" }
-size = 11
+size = 10
 
 [window]
 padding.x = 0
 padding.y = 0
 decorations = "None"
+dynamic_padding = false
 
 [keyboard]
 bindings = [
