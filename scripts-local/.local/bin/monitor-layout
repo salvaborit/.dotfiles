@@ -1,0 +1,155 @@
+#!/usr/bin/env bash
+# Monitor layout switcher using rofi
+# Allows selecting from available monitor layout presets
+
+set -euo pipefail
+
+# Constants
+MONITORS_DIR="$HOME/.config/hypr/monitors"
+HYPRLAND_CONF="$HOME/.config/hypr/hyprland.conf"
+STATE_FILE="$HOME/.cache/current-monitor-layout"
+
+# Get list of available layouts
+get_layouts() {
+  if [[ ! -d "$MONITORS_DIR" ]]; then
+    notify-send "Monitor Layout" "No monitor layouts found in $MONITORS_DIR" -u critical
+    exit 1
+  fi
+
+  find "$MONITORS_DIR" -maxdepth 1 -name "*.conf" -type f | sort
+}
+
+# Extract layout description from config file
+get_layout_description() {
+  local config_file="$1"
+  local description=""
+
+  # Try to extract description from first line comment
+  if [[ -f "$config_file" ]]; then
+    description=$(head -n 1 "$config_file" | sed -n 's/^# Layout: //p')
+  fi
+
+  # Fallback to filename if no description found
+  if [[ -z "$description" ]]; then
+    description=$(basename "$config_file" .conf)
+  fi
+
+  echo "$description"
+}
+
+# Get current layout from hyprland.conf
+get_current_layout() {
+  if [[ -f "$HYPRLAND_CONF" ]]; then
+    # Extract the monitors/*.conf path from hyprland.conf
+    local current_path=$(grep "source.*monitors/.*\.conf" "$HYPRLAND_CONF" | head -n 1 | sed -n 's/.*monitors\/\([^/]*\.conf\).*/\1/p')
+    if [[ -n "$current_path" ]]; then
+      echo "$current_path"
+      return 0
+    fi
+  fi
+
+  # Fallback: check state file
+  if [[ -f "$STATE_FILE" ]]; then
+    cat "$STATE_FILE"
+    return 0
+  fi
+
+  echo ""
+  return 1
+}
+
+# Create menu with layout options
+create_menu() {
+  local current_layout=$(get_current_layout || echo "")
+
+  get_layouts | while read -r layout_file; do
+    local layout_name=$(basename "$layout_file" .conf)
+    local description=$(get_layout_description "$layout_file")
+
+    # Mark current layout with checkmark
+    if [[ "$layout_name" == "$current_layout" ]]; then
+      echo "✓ $description"
+    else
+      echo "○ $description"
+    fi
+  done
+}
+
+# Apply layout by updating hyprland.conf and reloading
+apply_layout() {
+  local layout_description="$1"
+
+  # Extract layout filename from description (remove status indicators)
+  local layout_file=""
+
+  # First try exact match
+  for file in $(get_layouts); do
+    local desc=$(get_layout_description "$file")
+    if [[ "$desc" == "$layout_description" ]]; then
+      layout_file="$file"
+      break
+    fi
+  done
+
+  # If we didn't find it, try to match after stripping status indicators
+  if [[ -z "$layout_file" ]]; then
+    local clean_desc=$(echo "$layout_description" | sed -E 's/^(✓|○) //')
+    for file in $(get_layouts); do
+      local desc=$(get_layout_description "$file")
+      if [[ "$desc" == "$clean_desc" ]]; then
+        layout_file="$file"
+        break
+      fi
+    done
+  fi
+
+  if [[ -z "$layout_file" || ! -f "$layout_file" ]]; then
+    notify-send "Monitor Layout" "Layout not found: $layout_description" -u critical
+    exit 1
+  fi
+
+  local layout_name=$(basename "$layout_file" .conf)
+  local layout_path="monitors/$layout_name.conf"
+
+  # Update hyprland.conf to source the new layout
+  sed -i "s|source = ~/.config/hypr/monitors/.*\.conf.*|source = ~/.config/hypr/$layout_path       # Monitor configuration (active layout)|" "$HYPRLAND_CONF"
+
+  # Save current layout to state file
+  echo "$layout_name" > "$STATE_FILE"
+
+  # Apply the layout using hyprctl
+  # We need to parse the config file and apply each monitor line
+  while IFS= read -r line; do
+    if [[ "$line" =~ ^monitor[[:space:]]*=[[:space:]]* ]]; then
+      # Extract monitor config (everything after 'monitor = ')
+      monitor_config=$(echo "$line" | sed 's/^monitor[[:space:]]*=[[:space:]]*//' | sed 's/#.*//' | xargs)
+      if [[ -n "$monitor_config" ]]; then
+        hyprctl keyword monitor "$monitor_config"
+      fi
+    fi
+  done < "$layout_file"
+
+  notify-send "Monitor Layout" "Switched to: $(get_layout_description "$layout_file")"
+}
+
+# Main logic
+main() {
+  # Check if any layouts exist
+  if [[ $(get_layouts | wc -l) -eq 0 ]]; then
+    notify-send "Monitor Layout" "No monitor layouts found in $MONITORS_DIR" -u critical
+    exit 1
+  fi
+
+  # Use rofi to select layout
+  choice=$(create_menu | rofi -dmenu -p "Monitor Layout")
+
+  if [[ -z "$choice" ]]; then
+    exit 0
+  fi
+
+  # Strip status indicator and apply layout
+  layout_description=$(echo "$choice" | sed -E 's/^(✓|○) //')
+  apply_layout "$layout_description"
+}
+
+main "$@"
