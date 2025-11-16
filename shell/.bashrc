@@ -31,7 +31,7 @@ alias g='git'
 
 alias p='sudo pacman'
 alias q='exit'
-alias pacrm='pacman -Rns $(pacman -Qtdq)'
+alias pacrm='sudo pacman -Rns $(pacman -Qtdq)'
 
 alias pingpi='ping 192.168.1.12'
 
