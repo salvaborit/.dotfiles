@@ -29,6 +29,7 @@ alias gits='git status'
 alias d='docker'
 alias g='git'
 alias p='sudo pacman'
+alias q='exit'
 
 alias pingpi='ping 192.168.1.12'
 
