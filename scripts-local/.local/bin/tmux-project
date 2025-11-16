@@ -79,7 +79,7 @@ main() {
     fi
 
     # Use rofi to select project
-    selected=$(echo "$projects" | rofi -dmenu -p "Select project for tmux session")
+    selected=$(echo "$projects" | rofi -dmenu -p "Projects")
 
     if [ -z "$selected" ]; then
       exit 0
