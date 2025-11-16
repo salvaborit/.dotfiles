@@ -1,9 +1,9 @@
 #!/bin/bash
-# Minimal system menu using walker
+# Minimal system menu using rofi
 # Provides quick access to common system actions
 
 menu() {
-  walker --dmenu -p "$1"
+  rofi -dmenu -p "$1"
 }
 
 show_main_menu() {
