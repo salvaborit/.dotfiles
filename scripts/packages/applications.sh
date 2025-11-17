@@ -30,6 +30,7 @@ install_applications() {
     "localsend-bin"
     "teams-for-linux"
     "forticlient-vpn"
+    "zoom"
   )
 
   install_aur_packages "${aur_packages[@]}"
