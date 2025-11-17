@@ -11,6 +11,8 @@ install_development_tools() {
 
   local packages=(
     "docker"
+    "docker-compose"
+    "docker-buildx"
     "lazydocker"
     "lazygit"
     "neovim"
@@ -36,16 +38,29 @@ install_development_tools() {
 
   install_aur_packages "${aur_packages[@]}"
 
-  # Enable and start docker service
+  # Configure docker socket activation (start on-demand, not at boot)
   if is_installed "docker"; then
-    if ! systemctl is-enabled docker &>/dev/null; then
-      log_info "Enabling Docker service..."
-      sudo systemctl enable docker
+    # Disable service auto-start
+    if systemctl is-enabled docker &>/dev/null; then
+      log_info "Disabling docker.service auto-start..."
+      sudo systemctl disable docker
     fi
 
-    if ! systemctl is-active docker &>/dev/null; then
-      log_info "Starting Docker service..."
-      sudo systemctl start docker
+    # Stop the service if running
+    if systemctl is-active docker &>/dev/null; then
+      log_info "Stopping docker.service..."
+      sudo systemctl stop docker
+    fi
+
+    # Enable socket activation
+    if ! systemctl is-enabled docker.socket &>/dev/null; then
+      log_info "Enabling docker.socket for on-demand activation..."
+      sudo systemctl enable docker.socket
+    fi
+
+    if ! systemctl is-active docker.socket &>/dev/null; then
+      log_info "Starting docker.socket..."
+      sudo systemctl start docker.socket
     fi
 
     # Add user to docker group if not already
