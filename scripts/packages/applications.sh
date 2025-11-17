@@ -28,6 +28,8 @@ install_applications() {
     "satty" # Screenshot annotation tool
     "slack-desktop"
     "localsend-bin"
+    "teams-for-linux"
+    "forticlient-vpn"
   )
 
   install_aur_packages "${aur_packages[@]}"
