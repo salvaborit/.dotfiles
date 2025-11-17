@@ -31,7 +31,7 @@ create_project_sessions() {
 
   # Session names for each terminal
   local editor_session="${base_name}-editor"
-  local terminal_session="${base_name}-terminal"
+  local terminal_session="${base_name}-bash"
   local git_session="${base_name}-git"
 
   # Check if sessions already exist
@@ -56,7 +56,7 @@ create_project_sessions() {
 
   # Session 3: Terminal (bash)
   tmux new-session -d -s "$terminal_session" -c "$project_path"
-  tmux rename-window -t "$terminal_session:1" "terminal"
+  tmux rename-window -t "$terminal_session:1" "bash"
 
   echo "Created sessions for project: $project_path"
 }
@@ -97,7 +97,7 @@ main() {
   # Create sessions
   base_name=$(session_name_from_path "$selected")
   editor_session="${base_name}-editor"
-  terminal_session="${base_name}-terminal"
+  terminal_session="${base_name}-bash"
   git_session="${base_name}-git"
 
   if create_project_sessions "$selected" "$base_name"; then
