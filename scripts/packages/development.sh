@@ -37,6 +37,7 @@ install_development_tools() {
   local aur_packages=(
     "postman-bin"
     "intellij-idea-ultimate-edition"
+    "tlclient"
   )
 
   install_aur_packages "${aur_packages[@]}"
