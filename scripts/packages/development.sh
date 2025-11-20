@@ -16,18 +16,15 @@ install_development_tools() {
     "lazydocker"
     "lazygit"
     "neovim"
-
     "jdk21-openjdk"
     "jdk-openjdk"
     "jdk8-openjdk"
     "maven"
-
     "nodejs-lts-jod"
     "npm"
-
     "dbeaver"
-
     "subversion"
+    "gemini-cli"
   )
 
   install_packages "${packages[@]}"
