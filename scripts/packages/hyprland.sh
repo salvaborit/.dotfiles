@@ -1,62 +1,61 @@
 #!/usr/bin/env bash
-
 # Hyprland and window manager stack installation
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../common.sh"
 
 install_hyprland_stack() {
-    log_info "Installing Hyprland and window manager tools..."
-    echo ""
+  log_info "Installing Hyprland and window manager tools..."
+  echo ""
 
-    # Official repository packages
-    local packages=(
-        "hyprland"
-        "waybar"
-        "rofi"                          # Application launcher
-        "mako"                          # Notification daemon
-        "swaylock"                      # Screen lock
-        "hypridle"                      # Idle management
-        "hyprlock"                      # Screen locker
-        "hyprsunset"                    # Screen temperature control
-        "swaybg"                        # Wallpaper daemon
-        "grim"                          # Screenshot utility
-        "slurp"                         # Region selector
-        "satty"                         # Screenshot annotation
-        "jq"                            # JSON processor for scripts
-        "wl-clipboard"                  # Clipboard manager
-        "polkit-kde-agent"              # Polkit authentication
-        "xdg-desktop-portal-hyprland"   # Desktop portal
-        "qt5-wayland"                   # Qt5 Wayland support
-        "qt6-wayland"                   # Qt6 Wayland support
-        "xorg-xwayland"                 # X11 compatibility
-        "blueberry"                     # Bluetooth manager GUI
-        "wiremix"                       # Audio mixer for PipeWire/PulseAudio
-        "brightnessctl"                 # LCD brightness control
-        "swayosd"                       # OSD for volume/brightness
-        "imagemagick"                   # Image processing
-        "ffmpeg"                        # Video processing (for screenrecord)
-        "v4l-utils"                     # Webcam support (for screenrecord)
-    )
+  # Official repository packages
+  local packages=(
+    "hyprland"
+    "waybar"
+    "rofi"                        # Application launcher
+    "mako"                        # Notification daemon
+    "swaylock"                    # Screen lock
+    "hypridle"                    # Idle management
+    "hyprlock"                    # Screen locker
+    "hyprsunset"                  # Screen temperature control
+    "swaybg"                      # Wallpaper daemon
+    "grim"                        # Screenshot utility
+    "slurp"                       # Region selector
+    "satty"                       # Screenshot annotation
+    "jq"                          # JSON processor for scripts
+    "wl-clipboard"                # Clipboard manager
+    "polkit-kde-agent"            # Polkit authentication
+    "xdg-desktop-portal-hyprland" # Desktop portal
+    "qt5-wayland"                 # Qt5 Wayland support
+    "qt6-wayland"                 # Qt6 Wayland support
+    "xorg-xwayland"               # X11 compatibility
+    "blueberry"                   # Bluetooth manager GUI
+    "wiremix"                     # Audio mixer for PipeWire/PulseAudio
+    "brightnessctl"               # LCD brightness control
+    "swayosd"                     # OSD for volume/brightness
+    "imagemagick"                 # Image processing
+    "ffmpeg"                      # Video processing (for screenrecord)
+    "v4l-utils"                   # Webcam support (for screenrecord)
+  )
 
-    install_packages "${packages[@]}"
+  install_packages "${packages[@]}"
 
-    # AUR packages
-    echo ""
-    local aur_packages=(
-        "gpu-screen-recorder"           # Hardware-accelerated screen recording
-        "wayfreeze"                     # Screen freeze for screenshots
-    )
+  # AUR packages
+  echo ""
+  local aur_packages=(
+    "gpu-screen-recorder" # Hardware-accelerated screen recording
+    "wayfreeze"           # Screen freeze for screenshots
+  )
 
-    install_aur_packages "${aur_packages[@]}"
+  install_aur_packages "${aur_packages[@]}"
 }
 
 # Run if executed directly
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    start_timer "$(basename "$0")"
-    if install_hyprland_stack; then
-        end_timer "success"
-    else
-        end_timer "failed"
-    fi
+  start_timer "$(basename "$0")"
+  if install_hyprland_stack; then
+    end_timer "success"
+  else
+    end_timer "failed"
+  fi
 fi

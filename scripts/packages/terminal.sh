@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Terminal and shell tools installation
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

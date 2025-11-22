@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Development tools installation
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -10,23 +9,39 @@ install_development_tools() {
   echo ""
 
   local packages=(
+    "neovim"
+    "lazygit"
+    "subversion"
+    "lftp"
+
+    #docker
     "docker"
     "docker-compose"
     "docker-buildx"
     "lazydocker"
-    "lazygit"
-    "neovim"
+
+    #java
     "jdk21-openjdk"
     "jdk-openjdk"
     "jdk8-openjdk"
     "maven"
+
+    #js
     "nodejs-lts-jod"
     "npm"
+
+    #qol
     "dbeaver"
-    "subversion"
     "gemini-cli"
-    "lftp"
     "firefox"
+
+    # virtualization
+    "qemu-full"
+    "libvirt"
+    "virt-manager"
+    "dnsmasq"
+    "iptables-nft"
+    "edk2-ovmf"
   )
 
   install_packages "${packages[@]}"
